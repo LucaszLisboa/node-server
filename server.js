@@ -1,13 +1,27 @@
 const express = require('express');
-app = express()
+const app = express();
+const port = 3000;
+const bodyParser = require('body-parser');
+const cors = require('cors');
+require('dotenv').config();
 
+app.use(bodyParser.json());
+app.use(cors());
 
-app.get('/clientes', (req, res) => {
-    res.send("Joao, José, Thiago")
+const controller = require('./controller/movieController');
+
+app.get('/emAlta', controller.getMoviesEmAlta);
+
+app.get('/originaisNetflix', controller.getMoviesOriginaisNetflix);
+
+app.get('/populares', controller.getMoviesPopulares);
+
+app.get('/comedias', controller.getMoviesComedias);
+
+app.get('/romances', controller.getMoviesRomances);
+
+app.get('/documentarios', controller.getMoviesDocumentarios);
+
+app.listen(port, () => {
+    console.log(`Example app listening on port ${port}`)
 })
-
-app.get('/produtos', (req, res) => {
-    res.send("Caneta, Caderno, Lápis")
-})
-
-app.listen(8080);
