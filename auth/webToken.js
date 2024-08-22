@@ -6,7 +6,7 @@ const generateToken = (id) => {
 }
 
 const verifyJWT = (req, res, next) => {
-    let token = req.body.sessionID;
+    let token = req.headers['token'];
     if (!token) return res.status(401).json({ auth: false, message: 'No token provided.' });
 
     jwt.verify(token, secretKey, function(err, decoded) {
