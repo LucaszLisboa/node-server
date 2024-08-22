@@ -3,24 +3,36 @@ const app = express();
 const port = 3000;
 const bodyParser = require('body-parser');
 const cors = require('cors');
+const jwt = require('./auth/webToken');
+const session = require('express-session');
+
 require('dotenv').config();
 
+const secretKey = "your-secret-key";
 app.use(bodyParser.json());
 app.use(cors());
+app.use(session({
+    secret: 'secret-key',
+    resave: false,
+    saveUninitialized: false,
+  }));
 
-const controller = require('./controller/movieController');
+const movieController = require('./controller/movieController');
+const authController = require('./controller/authController');
 
-app.get('/emAlta', controller.getMoviesEmAlta);
+app.post('/login', authController.login);
 
-app.get('/originaisNetflix', controller.getMoviesOriginaisNetflix);
+app.get('/emAlta', jwt.verifyJWT, movieController.getMoviesEmAlta);
 
-app.get('/populares', controller.getMoviesPopulares);
+app.get('/originaisNetflix', movieController.getMoviesOriginaisNetflix);
 
-app.get('/comedias', controller.getMoviesComedias);
+app.get('/populares', movieController.getMoviesPopulares);
 
-app.get('/romances', controller.getMoviesRomances);
+app.get('/comedias', movieController.getMoviesComedias);
 
-app.get('/documentarios', controller.getMoviesDocumentarios);
+app.get('/romances', movieController.getMoviesRomances);
+
+app.get('/documentarios', movieController.getMoviesDocumentarios);
 
 app.listen(port, () => {
     console.log(`Example app listening on port ${port}`)
