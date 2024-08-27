@@ -18,6 +18,7 @@ app.use(session({
 
 const movieController = require('./controller/movieController');
 const authController = require('./controller/authController');
+const userController = require('./controller/userController');
 
 app.post('/login', authController.login);
 
@@ -32,6 +33,8 @@ app.get('/comedias', jwt.verifyJWT, movieController.getMoviesComedias);
 app.get('/romances', jwt.verifyJWT, movieController.getMoviesRomances);
 
 app.get('/documentarios', jwt.verifyJWT, movieController.getMoviesDocumentarios);
+
+app.get('/user', jwt.verifyJWT, userController.getUser);
 
 app.listen(port, () => {
     console.log(`Example app listening on port ${port}`)
